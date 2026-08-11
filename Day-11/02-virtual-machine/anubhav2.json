@@ -22,12 +22,15 @@
             "name": "ubuntuVM1-PublicIP",
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2023-04-01",
-            "location": "[resourceGroup().location]",
+            "location": "centralindia",
+            "sku": {
+                "name": "Standard"
+            },
             "tags": {
                 "displayName": "PublicIPAddress"
             },
             "properties": {
-                "publicIPAllocationMethod": "Dynamic",
+                "publicIPAllocationMethod": "Static",
                 "dnsSettings": {
                     "domainNameLabel": "[toLower('ubuntuVM1')]"
                 }
@@ -37,7 +40,7 @@
             "name": "ubuntuVM1-nsg",
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2023-04-01",
-            "location": "[resourceGroup().location]",
+            "location": "centralindia",
             "properties": {
                 "securityRules": [
                     {
@@ -91,7 +94,7 @@
             "name": "ubuntuVM1-NetworkInterface",
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2023-04-01",
-            "location": "[resourceGroup().location]",
+            "location": "centralindia",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/publicIPAddresses', 'ubuntuVM1-PublicIP')]",
                 "[resourceId('Microsoft.Network/virtualNetworks', 'ubuntuVM1-VirtualNetwork')]"
@@ -120,16 +123,17 @@
             "name": "ubuntuVM1",
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2023-03-01",
-            "location": "[resourceGroup().location]",
+            "location": "centralindia",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkInterfaces', 'ubuntuVM1-NetworkInterface')]"
+                "[resourceId('Microsoft.Network/networkInterfaces', 'ubuntuVM1-NetworkInterface')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', 'anubhavvmarm')]"
             ],
             "tags": {
                 "displayName": "ubuntuVM1"
             },
             "properties": {
                 "hardwareProfile": {
-                    "vmSize": "Standard_A2_v2"
+                    "vmSize": "Standard_B2s_v2"
                 },
                 "osProfile": {
                     "computerName": "ubuntuVM1",
@@ -140,7 +144,7 @@
                     "imageReference": {
                         "publisher": "Canonical",
                         "offer": "UbuntuServer",
-                        "sku": "16.04-LTS",
+                        "sku": "18.04-LTS",
                         "version": "latest"
                     },
                     "osDisk": {
@@ -159,7 +163,7 @@
                 "diagnosticsProfile": {
                     "bootDiagnostics": {
                         "enabled": true,
-                        "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', toLower('ubuntuVM1storageabhi'))).primaryEndpoints.blob]"
+                        "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts', 'anubhavvmarm')).primaryEndpoints.blob]"
                     }
                 }
             }

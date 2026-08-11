@@ -1,9 +1,6 @@
 # Steps to deploy storage account arm template
 
-### Create resource group
-
-```
-az group create --name vscode --location 'Central US'
+### Create resource 
 ```
 
 ### Create the storage account
